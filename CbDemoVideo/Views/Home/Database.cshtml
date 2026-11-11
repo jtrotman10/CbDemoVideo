@@ -1,0 +1,34 @@
+@model IReadOnlyList<CbDemoVideo.Models.Customer>
+
+@{
+    ViewData["Title"] = "Database";
+}
+
+<h1>Customers</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="2">No customers found.</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.Name</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

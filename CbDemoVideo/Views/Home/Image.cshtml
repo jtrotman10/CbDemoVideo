@@ -1,0 +1,9 @@
+@{
+    ViewData["Title"] = "Blob Image";
+}
+
+<div class="text-center">
+    <h1 class="display-5">Private Blob Image</h1>
+    <p>The image below is fetched server-side from Azure Blob Storage and streamed through this app.</p>
+    <img class="img-fluid border" src="@Url.Action("BlobImage", "Home")" alt="Azure blob image" />
+</div>
