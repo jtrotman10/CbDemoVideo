@@ -1,7 +1,28 @@
+using Azure.Storage.Blobs;
+using CbDemoVideo.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection configuration is required.");
+
+    options.UseSqlServer(connectionString);
+});
+
+builder.Services.AddSingleton(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("BlobStorage")
+        ?? throw new InvalidOperationException("ConnectionStrings:BlobStorage configuration is required.");
+
+    return new BlobServiceClient(connectionString);
+});
 
 var app = builder.Build();
 
