@@ -3,8 +3,7 @@ name: Build and deploy to Azure App Service
 on:
   push:
     branches:
-      - master
-      - no-secrets
+      - main
   workflow_dispatch:
 
 env:
@@ -44,9 +43,8 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy to Azure Web App slot
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          slot-name: no-secrets
           package: ${{ env.PUBLISH_PATH }}

@@ -1,4 +1,4 @@
-using Azure.Core;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using CbDemoVideo.Data;
 using Microsoft.Data.SqlClient;
@@ -30,14 +30,8 @@ builder.Services.AddSingleton(sp =>
     var serviceUri = configuration["BlobImage:ServiceUri"]
         ?? throw new InvalidOperationException("BlobImage:ServiceUri configuration is required.");
 
-    var credentialType = Type.GetType("Azure.Identity.ManagedIdentityCredential, Azure.Core")
-        ?? Type.GetType("Azure.Identity.ManagedIdentityCredential, Azure.Identity")
-        ?? throw new InvalidOperationException("ManagedIdentityCredential type was not found.");
-
-    var credential = Activator.CreateInstance(credentialType) as TokenCredential
-        ?? throw new InvalidOperationException("Unable to create a TokenCredential for managed identity.");
-
-    return new BlobServiceClient(new Uri(serviceUri), credential);
+    // Managed Identity in Azure; falls back to developer credentials (VS / az login) locally.
+    return new BlobServiceClient(new Uri(serviceUri), new DefaultAzureCredential());
 });
 
 var app = builder.Build();
